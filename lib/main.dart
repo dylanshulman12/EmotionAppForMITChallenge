@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+import 'data.dart';
+
 //flutter run -d linux
 
 void main() {
@@ -61,13 +63,26 @@ class _MainState extends State<Main> {
 class Test extends StatelessWidget {
   const Test({super.key});
 
+  // THIS SHOULD GO IN LOCAL STORAGE
+  var d = Data() ;
+  List<String> emotions = ["happy", "sad", "angry"] ;
+  int currEmotion = 0 ;
+
   @override
   Widget build(BuildContext context) {
     return (Card(
       child: Container(
         height: 70,
         alignment: Alignment.center,
-        child: const Text('one'),
+        child: ElevatedButton(
+          onPressed: () {
+            () {
+              var info = Info(emotions[currEmotion], Date()) ;
+              d.addData(info) ;
+            } ;
+          },
+          child: Text(emotions[currEmotion++]),
+        ),
       ),
     ));
   }
@@ -167,3 +182,4 @@ class _ChartState extends State<Chart> {
     );
   }
 }
+

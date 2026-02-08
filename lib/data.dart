@@ -16,14 +16,15 @@ class Date {
   List<String> daysList = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] ;
   List<int> daysInMonthKey = [31,28,31,30,31,30,31,31,30,31,30,31] ;
 
-  Date(int currYear, int currMonth, int currDay, int currHour) {
-    year = currYear ;
-    month = currMonth ;
-    day = currDay ;
-    hour = currHour ;
+  Date() {
+    DateTime now = DateTime.now() ;
+    hour = now.hour;
+    day = now.day;
+    month = now.month;
+    year = now.year;
 
     // number of days in the month
-    days = daysInMonthKey[currMonth - 1] ;
+    days = daysInMonthKey[currMonth - 1];
   }
 
   int getYear() {
@@ -42,27 +43,12 @@ class Date {
     return hour ;
   }
 
-  void setHour(int newHour) {
-    if(newHour >= 24) {
-      hour = 0 ;
-      if(day >= days) {
-        day = 0 ;
-        if(month >= 12) {
-          month = 0 ;
-          year += 1 ;
-        }
-        else {
-          month += 1 ;
-          days = daysInMonthKey[month - 1] ;
-        }
-      }
-      else {
-        day += 1 ;
-      }
-    }
-    else {
-      hour = newHour ;
-    }
+  void createDate() {
+    DateTime now = DateTime.now() ;
+    hour = now.hour;
+    day = now.day;
+    month = now.month;
+    year = now.year;
   }
 
   // returns string day of week

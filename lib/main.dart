@@ -34,7 +34,6 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   int currentPageIndex = 0;
-  final box = Hive.box(hiveBox);
 
   @override
   Widget build(BuildContext context) {
@@ -78,20 +77,15 @@ class _MainState extends State<Main> {
   }
 }
 
-class Test extends StatefulWidget {
-  Test({super.key});
+class Test extends StatelessWidget {
+  final box = Hive.box(hiveBox);
 
-  State<Test> createState() => _TestState();
-}
-
-
-class _TestState extends State<Test> {
   // THIS SHOULD GO IN LOCAL STORAGE
   var d = Data() ;
   List<String> emotions = ["happy", "sad", "angry"] ;
   int currEmotion = 0 ;
-  List<BarChartGroupData> barGroups = [] ;
-  box.put(list, barGroups) ;
+
+  Test({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +95,10 @@ class _TestState extends State<Test> {
         alignment: Alignment.center,
         child: ElevatedButton(
           onPressed: () {
-            setState(() {
-              barGroups.add(d.returnGraphData(emotions[currEmotion])) ;
-            },) ;
             () {
               var info = Info(emotions[currEmotion], Date()) ;
-              d.addData(info) ;
+              d.addData(info);             
+              box.put("list", d);
             } ;
           },
           child: Text(emotions[currEmotion++]),
@@ -154,6 +146,7 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
+  final box = Hive.box(hiveBox);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -185,7 +178,8 @@ class _ChartState extends State<Chart> {
           // Background color
           backgroundColor: const Color.fromRGBO(245, 227, 185, 1),
           // Bar data
-          barGroups: barGroups,
+          barGroups: box.get("list"), // get local storage list
+          
         ),
       ),
     );

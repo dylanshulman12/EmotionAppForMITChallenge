@@ -165,7 +165,7 @@ class Data {
       rods.add(
         BarChartRodData(
           fromY: 0,
-          toY: combinedData[elem]!.toDouble(),
+          toY: combinedData[elem].toDouble(),
           color: Colors.purple,
           width: 10,
         ),

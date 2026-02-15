@@ -78,14 +78,20 @@ class _MainState extends State<Main> {
   }
 }
 
-class Test extends StatelessWidget {
+class Test extends StatefulWidget {
   Test({super.key});
 
+  State<Test> createState() => _TestState();
+}
+
+
+class _TestState extends State<Test> {
   // THIS SHOULD GO IN LOCAL STORAGE
   var d = Data() ;
   List<String> emotions = ["happy", "sad", "angry"] ;
   int currEmotion = 0 ;
   List<BarChartGroupData> barGroups = [] ;
+  box.put(list, barGroups) ;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +102,7 @@ class Test extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             setState(() {
-              barGroups.add(returnGraphData(emotions[currEmotion])) ;
+              barGroups.add(d.returnGraphData(emotions[currEmotion])) ;
             },) ;
             () {
               var info = Info(emotions[currEmotion], Date()) ;

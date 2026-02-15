@@ -22,9 +22,6 @@ class Date {
     day = now.day;
     month = now.month;
     year = now.year;
-
-    // number of days in the month
-    days = daysInMonthKey[currMonth - 1];
   }
 
   int getYear() {

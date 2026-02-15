@@ -67,6 +67,7 @@ class Test extends StatelessWidget {
   var d = Data() ;
   List<String> emotions = ["happy", "sad", "angry"] ;
   int currEmotion = 0 ;
+  List<BarChartGroupData> barGroups = [] ;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +77,9 @@ class Test extends StatelessWidget {
         alignment: Alignment.center,
         child: ElevatedButton(
           onPressed: () {
+            setState(() {
+              barGroups.add(returnGraphData(emotions[currEmotion])) ;
+            },) ;
             () {
               var info = Info(emotions[currEmotion], Date()) ;
               d.addData(info) ;
@@ -157,26 +161,7 @@ class _ChartState extends State<Chart> {
           // Background color
           backgroundColor: const Color.fromRGBO(245, 227, 185, 1),
           // Bar data
-          barGroups: [
-            BarChartGroupData(
-              x: 0,
-              barsSpace: 10,
-              barRods: [
-                BarChartRodData(
-                  fromY: 0,
-                  toY: 100,
-                  color: Colors.purple,
-                  width: 10,
-                ),
-                BarChartRodData(
-                  fromY: 0,
-                  toY: 60,
-                  color: Colors.purple,
-                  width: 10,
-                ),
-              ],
-            ),
-          ],
+          barGroups: barGroups,
         ),
       ),
     );

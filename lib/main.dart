@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 
 import 'data.dart';
 
-//flutter run -d linux
+const String hiveBox = 'dataStorage';
 
-void main() {
+Future main() async {
+    // It is used so that void main function 
+    // can be intiated after successfully
+    // intialization of data
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // To intialise the hive database
+    await Hive.initFlutter();
+    
+    await Hive.openBox(hiveBox);
+    
+
   runApp(const MaterialApp(home: Main()));
 }
+
 
 class Main extends StatefulWidget {
   const Main({super.key});
@@ -16,8 +30,12 @@ class Main extends StatefulWidget {
   State<Main> createState() => _MainState();
 }
 
+
+
 class _MainState extends State<Main> {
   int currentPageIndex = 0;
+  final box = Hive.box(hiveBox);
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -61,7 +79,7 @@ class _MainState extends State<Main> {
 }
 
 class Test extends StatelessWidget {
-  const Test({super.key});
+  Test({super.key});
 
   // THIS SHOULD GO IN LOCAL STORAGE
   var d = Data() ;

@@ -107,9 +107,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final box = Hive.box(hiveBox);
 
-  // THIS SHOULD GO IN LOCAL STORAGE
-  var d = Data();
-
   List<String> emotions = ["happy", "sad", "angry"];
 
   int currEmotion = 0;
@@ -117,7 +114,7 @@ class _HomeState extends State<Home> {
 
 
   Widget build(BuildContext context) {
-    box.put("data", d);
+    var d = box.get("data") ?? Data();
 
     return (Card(
       child: Container(

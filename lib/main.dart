@@ -148,13 +148,27 @@ class Chart extends StatefulWidget {
 
 class _ChartState extends State<Chart> {
   final box = Hive.box(hiveBox);
+
   BarChartGroupData barChartGroupData = BarChartGroupData(x: 0) ;
 
   BarChartGroupData createBarData() {
-    for (int elem in box.get("list")) {
-      // MAKE BAR RODS AND ADD TO BAR CHART GROUP DATA DO LATER
+    final List<int> values = box.get("list").cast<int>();
+    print("running check 1");
+    List<BarChartRodData> rods = [];
+    for (int elem in values) {
+      print("running check 2 (in loop)");
+      rods.add(BarChartRodData(toY: elem.toDouble())) ;
     }
+    print("running check 3");
+
+    barChartGroupData =  BarChartGroupData(
+      x: 0,
+      barRods: rods,
+      barsSpace: 10,
+    ); ;
+    return barChartGroupData ;
   }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -191,14 +205,23 @@ class _ChartState extends State<Chart> {
             // Background color
             backgroundColor: const Color.fromRGBO(245, 227, 185, 1),
             // Bar data
-            barGroups: barChartGroupData,
+            barGroups: [barChartGroupData],
           )
           ),
           ),
           ElevatedButton(
             onPressed: () {
+              print("running sorting");
               box.put("list", box.get("data").returnGraphData("Sunday", 0)) ;
-              print("Sorting data"); // PRINT STATEMENT TO CHECK THIS BUTTON WORKS
+              createBarData() ; // error here <-----
+              print("\n Sorting Data: ");
+              print(barChartGroupData); // PRINT STATEMENT TO CHECK THIS BUTTON WORKS
+              print("---------------------\n");
+              print(box.get("list"));
+              print("---------------------\n");
+              print(box.get("data").dataStorage[0].date.getDayOfWeek());
+              print("---------------------\n");
+              setState(() {});
             },
             child: Text("Sunday"),
           ),

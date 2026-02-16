@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'data.dart';
 
+
 const String hiveBox = 'dataStorage';
 
 Future main() async {
@@ -15,6 +16,9 @@ Future main() async {
 
     // To intialise the hive database
     await Hive.initFlutter();
+
+    // register adapters
+    Hive.registerAdapter(DataAdapter());
     
     await Hive.openBox(hiveBox);
     
@@ -35,6 +39,7 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   int currentPageIndex = 0;
 
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -44,7 +49,7 @@ class _MainState extends State<Main> {
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: <Widget>[
-          const Home(),
+          Home(),
           const Plant(),
           const Chart()
         ][currentPageIndex], // show only the selected page
@@ -77,36 +82,7 @@ class _MainState extends State<Main> {
   }
 }
 
-class Test extends StatelessWidget {
-  final box = Hive.box(hiveBox);
 
-  // THIS SHOULD GO IN LOCAL STORAGE
-  var d = Data() ;
-  List<String> emotions = ["happy", "sad", "angry"] ;
-  int currEmotion = 0 ;
-
-  Test({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return (Card(
-      child: Container(
-        height: 70,
-        alignment: Alignment.center,
-        child: ElevatedButton(
-          onPressed: () {
-            () {
-              var info = Info(emotions[currEmotion], Date()) ;
-              d.addData(info);             
-              box.put("list", d);
-            } ;
-          },
-          child: Text(emotions[currEmotion++]),
-        ),
-      ),
-    ));
-  }
-}
 
 class Plant extends StatefulWidget {
   const Plant({super.key});
@@ -123,20 +99,45 @@ class _PlantState extends State<Plant> {
 }
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  Home({super.key});
 
-  @override
-  State<Home> createState() => _HomeState();
+  @override State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  @override
+  final box = Hive.box(hiveBox);
+
+  // THIS SHOULD GO IN LOCAL STORAGE
+  var d = Data();
+
+  List<String> emotions = ["happy", "sad", "angry"];
+
+  int currEmotion = 0;
+
+
+
   Widget build(BuildContext context) {
-    return (Column(
-      children: [Test(), Test(), Test(), Test(), Test(), Test(), Test()],
+    box.put("data", d);
+
+    return (Card(
+      child: Container(
+        height: 70,
+        alignment: Alignment.center,
+        child: ElevatedButton(
+          onPressed: () {
+            var info = Info(emotions[currEmotion], Date()) ;
+            d.addData(info) ;
+            box.put("data", d) ;
+            print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
+            setState(() {});
+          },
+          child: Text(emotions[currEmotion]),
+        ),
+      ),
     ));
   }
 }
+
 
 class Chart extends StatefulWidget {
   const Chart({super.key});
@@ -147,42 +148,65 @@ class Chart extends StatefulWidget {
 
 class _ChartState extends State<Chart> {
   final box = Hive.box(hiveBox);
+  BarChartGroupData barChartGroupData = BarChartGroupData(x: 0) ;
+
+  BarChartGroupData createBarData() {
+    for (int elem in box.get("list")) {
+      // MAKE BAR RODS AND ADD TO BAR CHART GROUP DATA DO LATER
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
-      child: BarChart(
-        BarChartData(
-          // Top title
-          titlesData: FlTitlesData(
-            show: true,
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(
-                reservedSize: 50,
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      'My Chart Title',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+      child: Container(
+        child: Column(
+        children: [
+          SizedBox(
+            height: 150,
+            child: BarChart(
+            BarChartData(
+            // Top title
+            titlesData: FlTitlesData(
+              show: true,
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  reservedSize: 50,
+                  showTitles: true,
+                  getTitlesWidget: (value, meta) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        'My Chart Title',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
+            // Background color
+            backgroundColor: const Color.fromRGBO(245, 227, 185, 1),
+            // Bar data
+            barGroups: barChartGroupData,
+          )
           ),
-          // Background color
-          backgroundColor: const Color.fromRGBO(245, 227, 185, 1),
-          // Bar data
-          barGroups: box.get("list"), // get local storage list
-          
-        ),
-      ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              box.put("list", box.get("data").returnGraphData("Sunday", 0)) ;
+              print("Sorting data"); // PRINT STATEMENT TO CHECK THIS BUTTON WORKS
+            },
+            child: Text("Sunday"),
+          ),
+        ]
+      )
+    ),
     );
+
   }
 }
 

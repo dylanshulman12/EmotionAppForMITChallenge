@@ -2,6 +2,9 @@ import 'dart:collection';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+part 'data.g.dart';
 
 
 class Date {
@@ -92,7 +95,7 @@ class Info {
   }
 }
 
-
+@HiveType(typeId: 0)
 class Data {
 
   // hashmap storing all the data ever added, key: unique number assigned to data, value: Info (see Info class)
@@ -150,7 +153,7 @@ class Data {
   }
 
   // returns the data points in graph info form
-  BarChartGroupData createGraphData(Map<String, int> filteredData, List<String> sortedData) {
+  List<int> createGraphData(int xInp, Map<String, int> filteredData, List<String> sortedData) {
     // x and y values
     List<int> combinedData = [];
 
@@ -158,30 +161,26 @@ class Data {
       combinedData.add(filteredData[sortedData[indx]]!) ;
     }
 
-    // create graph elements
-    List<BarChartRodData> rods = [] ;
+    // // create graph elements
+    // List<BarChartRodData> rods = [] ;
+    //
+    // for (int i = 0; i < combinedData.length; i++) {
+    //   rods.add(
+    //     BarChartRodData(
+    //       fromY: 0,
+    //       toY: combinedData[i].toDouble(),
+    //       color: Colors.purple,
+    //       width: 10,
+    //     ),
+    //   );
+    // }
 
-    for (int elem in combinedData) {
-      rods.add(
-        BarChartRodData(
-          fromY: 0,
-          toY: combinedData[elem].toDouble(),
-          color: Colors.purple,
-          width: 10,
-        ),
-      );
-    }
-
-    return BarChartGroupData(
-      x: 0,
-      barsSpace: 10,
-      barRods: rods,
-    );
+    return combinedData ;
   }
 
 
   // return BarChartGroupData sorted based on input
-  BarChartGroupData returnGraphData(String filter) {
+  List<int> returnGraphData(String filter, int xInp) {
     // FILTERED DATA
     // the Integer is the number of times that emotion is recorded for this filter
     Map<String, int> filteredData = <String, int>{};
@@ -212,14 +211,13 @@ class Data {
         if (value.getEmotion() == (filter)) {
           // find the new key value which is the emotion of the data point in data storage
           String key = value.getDate().getDayOfWeek();
-          filteredData =
-          sortData(key, filteredData, sortedData)["filteredData"];
+          filteredData = sortData(key, filteredData, sortedData)["filteredData"];
           sortedData = sortData(key, filteredData, sortedData)["sortedData"];
         }
       });
     }
 
-    return createGraphData(filteredData, sortedData);
+    return createGraphData(xInp, filteredData, sortedData);
   }
 
 

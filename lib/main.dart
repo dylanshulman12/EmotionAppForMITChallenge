@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -109,7 +111,6 @@ class _HomeState extends State<Home> {
 
   List<String> emotions = ["happy", "sad", "angry"];
 
-  int currEmotion = 0;
 
 
 
@@ -118,17 +119,53 @@ class _HomeState extends State<Home> {
 
     return (Card(
       child: Container(
-        height: 70,
+        height: 200,
         alignment: Alignment.center,
-        child: ElevatedButton(
-          onPressed: () {
-            var info = Info(emotions[currEmotion], Date()) ;
-            d.addData(info) ;
-            box.put("data", d) ;
-            print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
-            setState(() {});
-          },
-          child: Text(emotions[currEmotion]),
+        child: Column(
+          children:[
+            ElevatedButton(
+              onPressed: () {
+                var info = Info("happy", Date()) ;
+                print("data bef.");
+                print(box.get("data").dataStorage);
+                d.addData(info) ;
+                box.put("data", d) ;
+                print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
+                print(box.get("data").dataStorage);
+                print("\n");
+                setState(() {});
+              },
+              child: Text("happy"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                var info = Info("sad", Date()) ;
+                print("data bef.");
+                print(box.get("data").dataStorage);
+                d.addData(info) ;
+                box.put("data", d) ;
+                print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
+                print(box.get("data").dataStorage);
+                print("\n");
+                setState(() {});
+              },
+              child: Text("sad"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                var info = Info("angry", Date()) ;
+                print("data bef.");
+                print(box.get("data").dataStorage);
+                d.addData(info) ;
+                box.put("data", d) ;
+                print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
+                print(box.get("data").dataStorage);
+                print("\n");
+                setState(() {});
+              },
+              child: Text("angry"),
+            ),
+          ],
         ),
       ),
     ));
@@ -147,72 +184,93 @@ class _ChartState extends State<Chart> {
   final box = Hive.box(hiveBox);
 
   BarChartGroupData barChartGroupData = BarChartGroupData(x: 0) ;
+  List<String> barLabels = [];
 
   BarChartGroupData createBarData() {
     final List<int> values = box.get("list").cast<int>();
-    print("running check 1");
     List<BarChartRodData> rods = [];
     for (int elem in values) {
-      print("running check 2 (in loop)");
       rods.add(BarChartRodData(toY: elem.toDouble())) ;
     }
-    print("running check 3");
 
     barChartGroupData =  BarChartGroupData(
       x: 0,
       barRods: rods,
       barsSpace: 10,
-    ); ;
+    );
     return barChartGroupData ;
+  }
+
+  // create the labels that pop up when you click on a graph bar
+  List<String> createBarLabels(String filter) {
+    final List<String> labels = box.get("labels").cast<String>();
+    barLabels = labels;
+    return barLabels;
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 600,
       child: Container(
         child: Column(
         children: [
           SizedBox(
-            height: 150,
+            height: 450,
             child: BarChart(
             BarChartData(
-            // Top title
-            titlesData: FlTitlesData(
-              show: true,
-              topTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  reservedSize: 50,
-                  showTitles: true,
-                  getTitlesWidget: (value, meta) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        'My Chart Title',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+              // Top title
+              titlesData: FlTitlesData(
+                show: true,
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    reservedSize: 50,
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          'Data',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              // Background color
+              backgroundColor: const Color.fromRGBO(245, 227, 185, 1),
+              // Bar data
+              barGroups: [barChartGroupData],
+              // the labels that pop up when you click on a bar
+              barTouchData: BarTouchData(
+                touchTooltipData: BarTouchTooltipData(
+                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                    return BarTooltipItem(
+                      barLabels[rodIndex],
+                      TextStyle(color: Colors.white),
                     );
                   },
                 ),
               ),
-            ),
-            // Background color
-            backgroundColor: const Color.fromRGBO(245, 227, 185, 1),
-            // Bar data
-            barGroups: [barChartGroupData],
           )
           ),
           ),
           ElevatedButton(
             onPressed: () {
               print("running sorting");
-              box.put("list", box.get("data").returnGraphData("Sunday", 0)) ;
-              createBarData() ; // error here <-----
+              var returnedData = box.get("data").returnGraphData("Thursday", 0);
+              box.put("list", returnedData["graphData"]) ;
+              box.put("labels", returnedData["sortedData"]) ;
+              createBarData() ;
+              createBarLabels("Thursday");
               print("\n Sorting Data: ");
               print(barChartGroupData); // PRINT STATEMENT TO CHECK THIS BUTTON WORKS
+              print("---------------------\n");
+              print(box.get("labels"));
               print("---------------------\n");
               print(box.get("list"));
               print("---------------------\n");
@@ -220,7 +278,28 @@ class _ChartState extends State<Chart> {
               print("---------------------\n");
               setState(() {});
             },
-            child: Text("Sunday"),
+            child: Text("Thursday"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              print("running sorting");
+              var returnedData = box.get("data").returnGraphData("Friday", 0);
+              box.put("list", returnedData["graphData"]) ;
+              box.put("labels", returnedData["sortedData"]) ;
+              createBarData() ;
+              createBarLabels("Friday");
+              print("\n Sorting Data: ");
+              print(barChartGroupData); // PRINT STATEMENT TO CHECK THIS BUTTON WORKS
+              print("---------------------\n");
+              print(box.get("labels"));
+              print("---------------------\n");
+              print(box.get("list"));
+              print("---------------------\n");
+              print(box.get("data").dataStorage[0].date.getDayOfWeek());
+              print("---------------------\n");
+              setState(() {});
+            },
+            child: Text("Friday"),
           ),
         ]
       )

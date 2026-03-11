@@ -134,8 +134,7 @@ class Data {
       int indxMinus = sortedData.indexOf(key) - 1;
 
       // properly re-sort sortedData
-      while ((indxMinus >= 0) &&
-          (filteredData[sortedData[indxMinus]]! < filteredData[key]!)) {
+      while ((indxMinus >= 0) && (filteredData[sortedData[indxMinus]]! < filteredData[key]!)) {
         // swap two values
         var store = sortedData[indxMinus];
         sortedData[indxMinus] = sortedData[indxMinus + 1];
@@ -156,7 +155,7 @@ class Data {
   }
 
   // returns the data points in graph info form
-  List<int> createGraphData(int xInp, Map<String, int> filteredData, List<String> sortedData) {
+  Map<String, List<Object>> createGraphData(int xInp, Map<String, int> filteredData, List<String> sortedData) {
     // x and y values
     List<int> combinedData = [];
 
@@ -178,12 +177,15 @@ class Data {
     //   );
     // }
 
-    return combinedData ;
+    return {
+      "graphData": combinedData,
+      "sortedData": sortedData,
+    } ;
   }
 
 
   // return BarChartGroupData sorted based on input
-  List<int> returnGraphData(String filter, int xInp) {
+  Map<String, List<Object>> returnGraphData(String filter, int xInp) {
     // FILTERED DATA
     // the Integer is the number of times that emotion is recorded for this filter
     Map<String, int> filteredData = <String, int>{};
@@ -199,9 +201,9 @@ class Data {
         if (value.getDate().getDayOfWeek() == (filter)) {
           // find the new key value which is the emotion of the data point in data storage
           String key = value.getEmotion();
-          filteredData =
-          sortData(key, filteredData, sortedData)["filteredData"];
-          sortedData = sortData(key, filteredData, sortedData)["sortedData"];
+          var sD = sortData(key, filteredData, sortedData);
+          filteredData = sD["filteredData"];
+          sortedData = sD["sortedData"];
         }
       });
     }

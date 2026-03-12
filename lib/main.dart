@@ -131,10 +131,10 @@ class _PlantState extends State<Plant> {
           ),
 
           // Plant widgets
-          for (var pos in positions)
+          for (int i = 0; i < numPoints; i++)
             Positioned(
-              left: pos["x"]! / 840 * screenWidth,   // convert to fraction of design width
-              top: pos["y"]! / 887 * screenHeight,  // convert to fraction of design height
+              left: positions[i]["x"]! / 840 * screenWidth,   // convert to fraction of design width
+              top: positions[i]["y"]! / 887 * screenHeight,  // convert to fraction of design height
               child: Image.asset(
                 'assets/images/Fern 3.PNG',
                 width: 120,

@@ -11,19 +11,19 @@ import 'data.dart';
 const String hiveBox = 'dataStorage';
 
 Future main() async {
-    // It is used so that void main function 
-    // can be intiated after successfully
-    // intialization of data
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-    // To intialise the hive database
-    await Hive.initFlutter();
+  await Hive.initFlutter();
 
-    // register adapters
-    Hive.registerAdapter(DataAdapter());
-    
-    await Hive.openBox(hiveBox);
-    
+  Hive.registerAdapter(DataAdapter());
+
+  await Hive.openBox(hiveBox);
+  var box = Hive.box(hiveBox);
+
+  // Ensure the data object exists
+  if (!box.containsKey("data")) {
+    box.put("data", Data());
+  }
 
   runApp(const MaterialApp(home: Main()));
 }

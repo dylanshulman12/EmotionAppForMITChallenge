@@ -125,9 +125,10 @@ class _HomeState extends State<Home> {
 
     return (Card(
       child: Container(
-        height: 200,
+        height: 500,
         alignment: Alignment.center,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children:[
             ElevatedButton(
               onPressed: () {
@@ -141,7 +142,7 @@ class _HomeState extends State<Home> {
                 print("\n");
                 setState(() {});
               },
-                child: Image.asset('assets/my_image.png', width: 100, height: 50),
+                child: Image.asset('assets/images/happy_button.png', width: 150, height: 70),
             ),
             ElevatedButton(
               onPressed: () {
@@ -155,7 +156,7 @@ class _HomeState extends State<Home> {
                 print("\n");
                 setState(() {});
               },
-              child: Text("sad"),
+              child: Image.asset('assets/images/sad_button.png', width: 150, height: 70),
             ),
             ElevatedButton(
               onPressed: () {
@@ -169,7 +170,49 @@ class _HomeState extends State<Home> {
                 print("\n");
                 setState(() {});
               },
-              child: Text("angry"),
+              child: Image.asset('assets/images/angry_button.png', width: 150, height: 70),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                var info = Info("anxious", Date()) ;
+                print("data bef.");
+                print(box.get("data").dataStorage);
+                d.addData(info) ;
+                box.put("data", d) ;
+                print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
+                print(box.get("data").dataStorage);
+                print("\n");
+                setState(() {});
+              },
+              child: Image.asset('assets/images/anxious_button.png', width: 150, height: 70),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                var info = Info("excited", Date()) ;
+                print("data bef.");
+                print(box.get("data").dataStorage);
+                d.addData(info) ;
+                box.put("data", d) ;
+                print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
+                print(box.get("data").dataStorage);
+                print("\n");
+                setState(() {});
+              },
+              child: Image.asset('assets/images/excited_button.png', width: 150, height: 70),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                var info = Info("melancholy", Date()) ;
+                print("data bef.");
+                print(box.get("data").dataStorage);
+                d.addData(info) ;
+                box.put("data", d) ;
+                print("adding data"); // PRINT FUNCTION TO MAKE SURE BUTTON WORKS
+                print(box.get("data").dataStorage);
+                print("\n");
+                setState(() {});
+              },
+              child: Image.asset('assets/images/melancholy_button.png', width: 150, height: 70),
             ),
           ],
         ),
@@ -217,12 +260,12 @@ class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 600,
+      height: 1000,
       child: Container(
         child: Column(
         children: [
           SizedBox(
-            height: 450,
+            height: 400,
             child: BarChart(
             BarChartData(
               // Top title
@@ -267,6 +310,50 @@ class _ChartState extends State<Chart> {
           ),
           ElevatedButton(
             onPressed: () {
+              var returnedData = box.get("data").returnGraphData("Sunday", 0);
+              box.put("list", returnedData["graphData"]) ;
+              box.put("labels", returnedData["sortedData"]) ;
+              createBarData() ;
+              createBarLabels("Sunday");
+              setState(() {});
+            },
+            child: Text("Sunday"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              var returnedData = box.get("data").returnGraphData("Monday", 0);
+              box.put("list", returnedData["graphData"]) ;
+              box.put("labels", returnedData["sortedData"]) ;
+              createBarData() ;
+              createBarLabels("Monday");
+              setState(() {});
+            },
+            child: Text("Monday"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              var returnedData = box.get("data").returnGraphData("Tuesday", 0);
+              box.put("list", returnedData["graphData"]) ;
+              box.put("labels", returnedData["sortedData"]) ;
+              createBarData() ;
+              createBarLabels("Tuesday");
+              setState(() {});
+            },
+            child: Text("Tuesday"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              var returnedData = box.get("data").returnGraphData("Wednesday", 0);
+              box.put("list", returnedData["graphData"]) ;
+              box.put("labels", returnedData["sortedData"]) ;
+              createBarData() ;
+              createBarLabels("Wednesday");
+              setState(() {});
+            },
+            child: Text("Wednesday"),
+          ),
+          ElevatedButton(
+            onPressed: () {
               print("running sorting");
               var returnedData = box.get("data").returnGraphData("Thursday", 0);
               box.put("list", returnedData["graphData"]) ;
@@ -306,6 +393,17 @@ class _ChartState extends State<Chart> {
               setState(() {});
             },
             child: Text("Friday"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              var returnedData = box.get("data").returnGraphData("Saturday", 0);
+              box.put("list", returnedData["graphData"]) ;
+              box.put("labels", returnedData["sortedData"]) ;
+              createBarData() ;
+              createBarLabels("Saturday");
+              setState(() {});
+            },
+            child: Text("Saturday"),
           ),
         ]
       )

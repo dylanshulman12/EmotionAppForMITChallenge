@@ -96,14 +96,12 @@ class Plant extends StatefulWidget {
   @override
   State<Plant> createState() => _PlantState();
 }
-
 class _PlantState extends State<Plant> {
   final box = Hive.box(hiveBox);
 
   @override
   Widget build(BuildContext context) {
-    int numPoints = box.get("points");
-    print(numPoints);
+    int numPoints = box.get("points") ?? 0;
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -118,29 +116,63 @@ class _PlantState extends State<Plant> {
       {"x": 320.0, "y": 660.0},
     ];
 
+    final plantImages = [
+      'assets/images/Fern 1.PNG',
+      'assets/images/Fern 2.PNG',
+      'assets/images/Fern 3.PNG',
+    ];
 
+    // Build the list of Positioned widgets
+    List<Widget> plantWidgets = [];
+    int i = 0;
+    int posIndex = 0; 
+
+    while (i + 3 <= numPoints && posIndex < positions.length) {
+      print("outside while loop i: ${i}, pos ${posIndex}"); 
+      for (int j = 0; j < 3; j++) {
+        plantWidgets.add(
+          Positioned(
+            left: positions[posIndex]["x"]! / 840 * screenWidth,
+            top: positions[posIndex]["y"]! / 887 * screenHeight,
+            child: Image.asset(
+              plantImages[j], 
+              width: 120,
+              height: 120,
+            ),
+          ),
+        );
+      }
+      i += 3;
+      posIndex += 1;
+    }
+
+    for (int k = i; k < numPoints && posIndex < positions.length; k++) {
+      print("Leftovers i: ${i}; k: ${k}"); 
+
+      plantWidgets.add(
+        Positioned(
+          left: positions[posIndex]["x"]! / 840 * screenWidth,
+          top: positions[posIndex]["y"]! / 887 * screenHeight,
+          child: Image.asset(
+            plantImages[(k - i) % plantImages.length],
+            width: 120,
+            height: 120,
+          ),
+        ),
+      );
+    }
 
     return Center(
       child: Stack(
         children: [
-          // Garden background
+          // Background
           Image.asset(
             'assets/images/GardenBack 1.PNG',
             width: 800,
             height: 1000,
           ),
-
-          // Plant widgets
-          for (int i = 0; i < numPoints; i++)
-            Positioned(
-              left: positions[i]["x"]! / 840 * screenWidth,   // convert to fraction of design width
-              top: positions[i]["y"]! / 887 * screenHeight,  // convert to fraction of design height
-              child: Image.asset(
-                'assets/images/Fern 3.PNG',
-                width: 120,
-                height: 120,
-              ),
-            ),
+          // Plants
+          ...plantWidgets, // Spread the list of widgets
         ],
       ),
     );

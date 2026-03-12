@@ -96,15 +96,39 @@ class Plant extends StatefulWidget {
 class _PlantState extends State<Plant> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
+    return Center(child: Stack(
+    children: [
+      // Garden
+      Image.asset(
         'assets/images/GardenBack 1.PNG',
-        width: 600,
-        height: 1200,
+        height: 1000,
+        width: 800,
       ),
+
+      // List of positions for the top image
+      for (var pos in [
+        {"x": 200.0, "y": 450.0},
+        {"x": 380.0, "y": 435.0},
+        {"x": 270.0, "y": 520.0},
+        {"x": 385.0, "y": 530.0},
+        {"x": 200.0, "y": 600.0},
+        {"x": 320.0, "y": 630.0},
+      ])
+        Positioned(
+          left: pos["x"],
+          top: pos["y"],
+          child: Image.asset(
+            'assets/images/Fern 3.PNG',
+            width: 120,
+            height: 120,
+          ),
+        ),
+    ],
+  ),
     );
   }
 }
+
 
 class Home extends StatefulWidget {
   Home({super.key});

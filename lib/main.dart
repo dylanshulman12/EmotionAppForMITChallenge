@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
                 print("\n");
                 setState(() {});
               },
-              child: Text("happy"),
+                child: Image.asset('assets/my_image.png', width: 100, height: 50),
             ),
             ElevatedButton(
               onPressed: () {

@@ -163,20 +163,6 @@ class Data {
       combinedData.add(filteredData[sortedData[indx]]!) ;
     }
 
-    // // create graph elements
-    // List<BarChartRodData> rods = [] ;
-    //
-    // for (int i = 0; i < combinedData.length; i++) {
-    //   rods.add(
-    //     BarChartRodData(
-    //       fromY: 0,
-    //       toY: combinedData[i].toDouble(),
-    //       color: Colors.purple,
-    //       width: 10,
-    //     ),
-    //   );
-    // }
-
     return {
       "graphData": combinedData,
       "sortedData": sortedData,

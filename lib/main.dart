@@ -149,11 +149,12 @@ class _HomeState extends State<Home> {
 
     return (Card(
       child: Container(
-        height: 500,
+        height: 800,
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children:[
+            Image.asset("assets/images/What are you feeling_.png", width: 250, height: 130),
             ElevatedButton(
               onPressed: () {
                 var info = Info("happy", Date()) ;

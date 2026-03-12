@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
                 print("\n");
                 setState(() {});
               },
-                child: Image.asset('assets/my_image.png', width: 100, height: 50),
+                child: Image.asset('assets/images/happy_button.png', width: 100, height: 50),
             ),
             ElevatedButton(
               onPressed: () {
@@ -155,7 +155,7 @@ class _HomeState extends State<Home> {
                 print("\n");
                 setState(() {});
               },
-              child: Text("sad"),
+              child: Image.asset('assets/images/sad_button.png', width: 100, height: 50),
             ),
             ElevatedButton(
               onPressed: () {
@@ -169,7 +169,7 @@ class _HomeState extends State<Home> {
                 print("\n");
                 setState(() {});
               },
-              child: Text("angry"),
+              child: Image.asset('assets/images/angry_button.png', width: 100, height: 50),
             ),
           ],
         ),

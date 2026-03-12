@@ -25,6 +25,10 @@ Future main() async {
     box.put("data", Data());
   }
 
+  if (!box.containsKey("point")) {
+    box.put("points", 0);
+  }
+
   runApp(const MaterialApp(home: Main()));
 }
 
@@ -94,8 +98,13 @@ class Plant extends StatefulWidget {
 }
 
 class _PlantState extends State<Plant> {
+  final box = Hive.box(hiveBox);
+
   @override
   Widget build(BuildContext context) {
+    int numPoints = box.get("points");
+    print(numPoints);
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -166,6 +175,7 @@ class _HomeState extends State<Home> {
             Image.asset("assets/images/What are you feeling_.png", width: 250, height: 130),
             ElevatedButton(
               onPressed: () {
+                box.put("points", box.get("points") + 1);
                 var info = Info("happy", Date()) ;
                 print("data bef.");
                 print(box.get("data").dataStorage);
@@ -180,6 +190,7 @@ class _HomeState extends State<Home> {
             ),
             ElevatedButton(
               onPressed: () {
+                box.put("points", box.get("points") + 1);
                 var info = Info("sad", Date()) ;
                 print("data bef.");
                 print(box.get("data").dataStorage);
@@ -194,6 +205,7 @@ class _HomeState extends State<Home> {
             ),
             ElevatedButton(
               onPressed: () {
+                box.put("points", box.get("points") + 1);
                 var info = Info("angry", Date()) ;
                 print("data bef.");
                 print(box.get("data").dataStorage);
@@ -208,6 +220,7 @@ class _HomeState extends State<Home> {
             ),
             ElevatedButton(
               onPressed: () {
+                box.put("points", box.get("points") + 1);
                 var info = Info("anxious", Date()) ;
                 print("data bef.");
                 print(box.get("data").dataStorage);
@@ -222,6 +235,7 @@ class _HomeState extends State<Home> {
             ),
             ElevatedButton(
               onPressed: () {
+                box.put("points", box.get("points") + 1);
                 var info = Info("excited", Date()) ;
                 print("data bef.");
                 print(box.get("data").dataStorage);
@@ -236,6 +250,7 @@ class _HomeState extends State<Home> {
             ),
             ElevatedButton(
               onPressed: () {
+                box.put("points", box.get("points") + 1);
                 var info = Info("melancholy", Date()) ;
                 print("data bef.");
                 print(box.get("data").dataStorage);

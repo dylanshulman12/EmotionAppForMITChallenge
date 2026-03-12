@@ -96,35 +96,44 @@ class Plant extends StatefulWidget {
 class _PlantState extends State<Plant> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Stack(
-    children: [
-      // Garden
-      Image.asset(
-        'assets/images/GardenBack 1.PNG',
-        height: 1000,
-        width: 800,
-      ),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-      // List of positions for the top image
-      for (var pos in [
-        {"x": 200.0, "y": 450.0},
-        {"x": 380.0, "y": 435.0},
-        {"x": 270.0, "y": 520.0},
-        {"x": 385.0, "y": 530.0},
-        {"x": 200.0, "y": 600.0},
-        {"x": 320.0, "y": 630.0},
-      ])
-        Positioned(
-          left: pos["x"],
-          top: pos["y"],
-          child: Image.asset(
-            'assets/images/Fern 3.PNG',
-            width: 120,
-            height: 120,
+    // List of fixed positions
+    final positions = [
+      {"x": 60.0, "y": 450.0},
+      {"x": 400.0, "y": 435.0},
+      {"x": 240.0, "y": 520.0},
+      {"x": 500.0, "y": 560.0},
+      {"x": 50.0, "y": 600.0},
+      {"x": 320.0, "y": 660.0},
+    ];
+
+
+
+    return Center(
+      child: Stack(
+        children: [
+          // Garden background
+          Image.asset(
+            'assets/images/GardenBack 1.PNG',
+            width: 800,
+            height: 1000,
           ),
-        ),
-    ],
-  ),
+
+          // Plant widgets
+          for (var pos in positions)
+            Positioned(
+              left: pos["x"]! / 840 * screenWidth,   // convert to fraction of design width
+              top: pos["y"]! / 887 * screenHeight,  // convert to fraction of design height
+              child: Image.asset(
+                'assets/images/Fern 3.PNG',
+                width: 120,
+                height: 120,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -22,7 +22,7 @@ class Date {
   Date() {
     DateTime now = DateTime.now() ;
     hour = now.hour;
-    day = now.day;
+    day = now.day - 1;
     month = now.month;
     year = now.year;
   }

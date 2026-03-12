@@ -96,7 +96,13 @@ class Plant extends StatefulWidget {
 class _PlantState extends State<Plant> {
   @override
   Widget build(BuildContext context) {
-    return (Center(child: Text('Plant goes here')));
+    return Center(
+      child: Image.asset(
+        'assets/images/GardenBack 1.PNG',
+        width: 600,
+        height: 1200,
+      ),
+    );
   }
 }
 
